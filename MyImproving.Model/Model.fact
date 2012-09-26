@@ -1,0 +1,130 @@
+namespace MyImproving.Model;
+
+fact Individual {
+key:
+    string anonymousId;
+
+query:
+}
+
+fact Domain {
+key:
+	string name;
+}
+
+fact Company {
+key:
+	unique;
+	publish Domain domain;
+
+mutable:
+	string name;
+}
+
+fact Director {
+key:
+	publish Individual individual;
+	Company company;
+}
+
+fact Game {
+key:
+	unique;
+	publish Domain domain;
+	Company* companies;
+}
+
+fact Round {
+key:
+	publish Game game;
+	int index;
+}
+
+fact Turn {
+key:
+	publish Company company;
+	Round round;
+}
+
+fact Borrow {
+key:
+	Turn turn;
+	int amount;
+}
+
+fact Repay {
+key:
+	Turn turn;
+	int amount;
+}
+
+fact Candidate {
+key:
+	unique;
+	Round round;
+	int skill;
+}
+
+fact Offer {
+key:
+	Turn turn;
+	Candidate candidate;
+	int chances;
+}
+
+fact Hire {
+key:
+	Offer offer;
+}
+
+fact Quit {
+key:
+	Hire hire;
+	Turn turn;
+}
+
+fact Payroll {
+key:
+	Turn turn;
+	Hire hire;
+}
+
+fact Resource {
+key:
+	int skill;
+	int need;
+	int revenue;
+}
+
+fact Gig {
+key:
+	unique;
+	Round round;
+	int duration;
+	int term;
+	Resource* resources;
+}
+
+fact Bid {
+key:
+	Turn turn;
+	Gig gig;
+	int chances;
+}
+
+fact Win {
+key:
+	Bid bid;
+}
+
+fact Lose {
+key:
+	Win win;
+	Turn turn;
+}
+
+fact Revenue {
+key:
+	Win win;
+	Turn turn;
+}

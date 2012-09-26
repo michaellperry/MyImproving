@@ -1,0 +1,33 @@
+digraph "MyImproving.Model"
+{
+    rankdir=BT
+    Company -> Domain [color="red"]
+    Company__name -> Company
+    Company__name -> Company__name [label="  *"]
+    Director -> Individual [color="red"]
+    Director -> Company
+    Game -> Domain [color="red"]
+    Game -> Company [label="  *"]
+    Round -> Game [color="red"]
+    Turn -> Company [color="red"]
+    Turn -> Round
+    Borrow -> Turn
+    Repay -> Turn
+    Candidate -> Round
+    Offer -> Turn
+    Offer -> Candidate
+    Hire -> Offer
+    Quit -> Hire
+    Quit -> Turn
+    Payroll -> Turn
+    Payroll -> Hire
+    Gig -> Round
+    Gig -> Resource [label="  *"]
+    Bid -> Turn
+    Bid -> Gig
+    Win -> Bid
+    Lose -> Win
+    Lose -> Turn
+    Revenue -> Win
+    Revenue -> Turn
+}

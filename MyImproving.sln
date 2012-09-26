@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyImproving", "MyImproving\MyImproving.csproj", "{5294F1AE-BB55-492D-A22E-21E636B12581}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyImproving.Model", "MyImproving.Model\MyImproving.Model.csproj", "{28B78D92-FE44-4959-AB24-3D09F3FCBCBD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyImproving.Test", "MyImproving.Test\MyImproving.Test.csproj", "{0FA9CD08-EA1A-479F-B355-41AF17B02DE3}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5294F1AE-BB55-492D-A22E-21E636B12581}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5294F1AE-BB55-492D-A22E-21E636B12581}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5294F1AE-BB55-492D-A22E-21E636B12581}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5294F1AE-BB55-492D-A22E-21E636B12581}.Release|Any CPU.Build.0 = Release|Any CPU
+		{28B78D92-FE44-4959-AB24-3D09F3FCBCBD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{28B78D92-FE44-4959-AB24-3D09F3FCBCBD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{28B78D92-FE44-4959-AB24-3D09F3FCBCBD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{28B78D92-FE44-4959-AB24-3D09F3FCBCBD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0FA9CD08-EA1A-479F-B355-41AF17B02DE3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0FA9CD08-EA1A-479F-B355-41AF17B02DE3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0FA9CD08-EA1A-479F-B355-41AF17B02DE3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0FA9CD08-EA1A-479F-B355-41AF17B02DE3}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
