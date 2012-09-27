@@ -10,6 +10,11 @@ query:
 fact Domain {
 key:
 	string name;
+
+query:
+	Company* companies {
+		Company c : c.domain = this
+	}
 }
 
 fact Company {

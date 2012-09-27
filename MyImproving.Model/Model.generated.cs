@@ -183,6 +183,13 @@ namespace MyImproving.Model
         // Roles
 
         // Queries
+        public static Query MakeQueryCompanies()
+		{
+			return new Query()
+				.JoinSuccessors(Company.RoleDomain)
+            ;
+		}
+        public static Query QueryCompanies = MakeQueryCompanies();
 
         // Predicates
 
@@ -192,6 +199,7 @@ namespace MyImproving.Model
         private string _name;
 
         // Results
+        private Result<Company> _companies;
 
         // Business constructor
         public Domain(
@@ -211,6 +219,7 @@ namespace MyImproving.Model
         // Result initializer
         private void InitializeResults()
         {
+            _companies = new Result<Company>(this, QueryCompanies);
         }
 
         // Predecessor access
@@ -222,6 +231,10 @@ namespace MyImproving.Model
         }
 
         // Query result access
+        public Result<Company> Companies
+        {
+            get { return _companies; }
+        }
 
         // Mutable property access
 
@@ -2345,6 +2358,9 @@ namespace MyImproving.Model
 				Domain._correspondenceFactType,
 				new Domain.CorrespondenceFactFactory(fieldSerializerByType),
 				new FactMetadata(new List<CorrespondenceFactType> { Domain._correspondenceFactType }));
+			community.AddQuery(
+				Domain._correspondenceFactType,
+				Domain.QueryCompanies.QueryDefinition);
 			community.AddType(
 				Company._correspondenceFactType,
 				new Company.CorrespondenceFactFactory(fieldSerializerByType),
