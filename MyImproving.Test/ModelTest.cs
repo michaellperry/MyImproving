@@ -27,11 +27,13 @@ namespace MyImproving.Test
                 .AddCommunicationStrategy(sharedCommunication)
                 .Register<CorrespondenceModel>()
                 .Subscribe(() => _individualFlynn)
+                .Subscribe(() => _individualFlynn.Companies)
 				;
             _communityAlan = new Community(new MemoryStorageStrategy())
                 .AddCommunicationStrategy(sharedCommunication)
                 .Register<CorrespondenceModel>()
                 .Subscribe(() => _individualAlan)
+                .Subscribe(() => _individualAlan.Companies)
                 ;
             _communityModerator = new Community(new MemoryStorageStrategy())
                 .AddCommunicationStrategy(sharedCommunication)
@@ -55,6 +57,26 @@ namespace MyImproving.Test
             List<Company> companies = _domainModerator.Companies.ToList();
             Assert.AreEqual(1, companies.Count);
             Assert.AreEqual("Initech", companies[0].Name.Value);
+        }
+
+        [TestMethod]
+        public void ModeratorCreatesAGame()
+        {
+            Company companyAlan = _individualAlan.CreateCompany();
+            companyAlan.Name = "Initech";
+
+            Company companyFlynn = _individualFlynn.CreateCompany();
+            companyFlynn.Name = "Flynn's";
+
+            Synchronize();
+
+            _domainModerator.CreateGame(_domainModerator.Companies);
+
+            Synchronize();
+
+            List<Game> gamesAlan = _individualAlan.Games.ToList();
+            Assert.AreEqual(1, gamesAlan.Count);
+            Assert.AreEqual(2, gamesAlan[0].Companies.Count());
         }
 
         private void Synchronize()

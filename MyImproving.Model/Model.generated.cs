@@ -17,7 +17,7 @@ digraph "MyImproving.Model"
     Director -> Individual [color="red"]
     Director -> Company
     Game -> Domain [color="red"]
-    Game -> Company [label="  *"]
+    Game -> Company [label="  *"] [color="red"]
     Round -> Game [color="red"]
     Turn -> Company [color="red"]
     Turn -> Round
@@ -92,6 +92,23 @@ namespace MyImproving.Model
         // Roles
 
         // Queries
+        public static Query MakeQueryCompanies()
+		{
+			return new Query()
+				.JoinSuccessors(Director.RoleIndividual)
+				.JoinPredecessors(Director.RoleCompany)
+            ;
+		}
+        public static Query QueryCompanies = MakeQueryCompanies();
+        public static Query MakeQueryGames()
+		{
+			return new Query()
+				.JoinSuccessors(Director.RoleIndividual)
+				.JoinPredecessors(Director.RoleCompany)
+				.JoinSuccessors(Game.RoleCompanies)
+            ;
+		}
+        public static Query QueryGames = MakeQueryGames();
 
         // Predicates
 
@@ -101,6 +118,8 @@ namespace MyImproving.Model
         private string _anonymousId;
 
         // Results
+        private Result<Company> _companies;
+        private Result<Game> _games;
 
         // Business constructor
         public Individual(
@@ -120,6 +139,8 @@ namespace MyImproving.Model
         // Result initializer
         private void InitializeResults()
         {
+            _companies = new Result<Company>(this, QueryCompanies);
+            _games = new Result<Game>(this, QueryGames);
         }
 
         // Predecessor access
@@ -131,6 +152,14 @@ namespace MyImproving.Model
         }
 
         // Query result access
+        public Result<Company> Companies
+        {
+            get { return _companies; }
+        }
+        public Result<Game> Games
+        {
+            get { return _games; }
+        }
 
         // Mutable property access
 
@@ -652,7 +681,7 @@ namespace MyImproving.Model
 			_correspondenceFactType,
 			"companies",
 			new CorrespondenceFactType("MyImproving.Model.Company", 1),
-			false));
+			true));
 
         // Queries
 
@@ -2354,6 +2383,12 @@ namespace MyImproving.Model
 				Individual._correspondenceFactType,
 				new Individual.CorrespondenceFactFactory(fieldSerializerByType),
 				new FactMetadata(new List<CorrespondenceFactType> { Individual._correspondenceFactType }));
+			community.AddQuery(
+				Individual._correspondenceFactType,
+				Individual.QueryCompanies.QueryDefinition);
+			community.AddQuery(
+				Individual._correspondenceFactType,
+				Individual.QueryGames.QueryDefinition);
 			community.AddType(
 				Domain._correspondenceFactType,
 				new Domain.CorrespondenceFactFactory(fieldSerializerByType),

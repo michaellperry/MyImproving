@@ -5,6 +5,16 @@ key:
     string anonymousId;
 
 query:
+	Company* companies {
+		Director d : d.individual = this
+		Company c : c = d.company
+	}
+
+	Game* games {
+		Director d : d.individual = this
+		Company c : c = d.company
+		Game g : g.companies = c
+	}
 }
 
 fact Domain {
@@ -36,7 +46,7 @@ fact Game {
 key:
 	unique;
 	publish Domain domain;
-	Company* companies;
+	publish Company* companies;
 }
 
 fact Round {
