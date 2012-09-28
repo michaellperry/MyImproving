@@ -8,15 +8,12 @@ using UpdateControls.Correspondence.IsolatedStorage;
 using UpdateControls.Correspondence.BinaryHTTPClient;
 using MyImproving.Model;
 
-namespace MyImproving
+namespace MyImproving.Moderator
 {
     public class SynchronizationService
     {
-        private const string ThisIndividual = "MyImproving.Individual.this";
-        private static readonly Regex Punctuation = new Regex(@"[{}\-]");
-
         private Community _community;
-        private Individual _individual;
+        private Domain _domain;
 
         public void Initialize()
         {
@@ -24,17 +21,10 @@ namespace MyImproving
             _community = new Community(IsolatedStorageStorageStrategy.Load())
                 .AddAsynchronousCommunicationStrategy(new BinaryHTTPAsynchronousCommunicationStrategy(configurationProvider))
                 .Register<CorrespondenceModel>()
-                .Subscribe(() => _individual)
-                .Subscribe(() => _individual.Companies)
+                .Subscribe(() => _domain)
                 ;
 
-            _individual = _community.LoadFact<Individual>(ThisIndividual);
-            if (_individual == null)
-            {
-                string randomId = Punctuation.Replace(Guid.NewGuid().ToString(), String.Empty).ToLower();
-                _individual = _community.AddFact(new Individual(randomId));
-                _community.SetFact(ThisIndividual, _individual);
-            }
+            _domain = _community.AddFact(new Domain("Improving Enterprises"));
 
             // Synchronize whenever the user has something to send.
             _community.FactAdded += delegate
@@ -62,9 +52,9 @@ namespace MyImproving
             get { return _community; }
         }
 
-        public Individual Individual
+        public Domain Domain
         {
-            get { return _individual; }
+            get { return _domain; }
         }
 
         public bool Synchronizing

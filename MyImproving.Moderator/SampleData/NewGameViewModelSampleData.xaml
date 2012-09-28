@@ -1,0 +1,14 @@
+<MyImproving_Moderator_ViewModels:NewGameViewModel xmlns:MyImproving_Moderator_ViewModels="clr-namespace:MyImproving.Moderator.ViewModels">
+	<MyImproving_Moderator_ViewModels:NewGameViewModel.Companies>
+		<MyImproving_Moderator_ViewModels:CompanyHeaderViewModel IsSelected="True" Name="Class nam cras curabitur duis"/>
+		<MyImproving_Moderator_ViewModels:CompanyHeaderViewModel IsSelected="False" Name="Aenean phasellus aliquam maecenas nunc"/>
+		<MyImproving_Moderator_ViewModels:CompanyHeaderViewModel IsSelected="True" Name="Integer praesent accumsan bibendum"/>
+		<MyImproving_Moderator_ViewModels:CompanyHeaderViewModel IsSelected="False" Name="Curae donec dictumst"/>
+		<MyImproving_Moderator_ViewModels:CompanyHeaderViewModel IsSelected="True" Name="Mauris amet etiam vestibulum adipiscing"/>
+		<MyImproving_Moderator_ViewModels:CompanyHeaderViewModel IsSelected="False" Name="Eleifend fusce nullam facilisi parturient"/>
+		<MyImproving_Moderator_ViewModels:CompanyHeaderViewModel IsSelected="True" Name="Vestibulum aptent vestibulum quisque"/>
+		<MyImproving_Moderator_ViewModels:CompanyHeaderViewModel IsSelected="False" Name="Auctor vivamus consequat lorem convallis"/>
+		<MyImproving_Moderator_ViewModels:CompanyHeaderViewModel IsSelected="True" Name="Aliquam aliquet"/>
+		<MyImproving_Moderator_ViewModels:CompanyHeaderViewModel IsSelected="False" Name="Morbi congue"/>
+	</MyImproving_Moderator_ViewModels:NewGameViewModel.Companies>
+</MyImproving_Moderator_ViewModels:NewGameViewModel>
