@@ -102,15 +102,6 @@ namespace MyImproving.Model
             ;
 		}
         public static Query QueryCompanies = MakeQueryCompanies();
-        public static Query MakeQueryGames()
-		{
-			return new Query()
-				.JoinSuccessors(Director.RoleIndividual)
-				.JoinPredecessors(Director.RoleCompany)
-				.JoinSuccessors(Game.RoleCompanies)
-            ;
-		}
-        public static Query QueryGames = MakeQueryGames();
 
         // Predicates
 
@@ -121,7 +112,6 @@ namespace MyImproving.Model
 
         // Results
         private Result<Company> _companies;
-        private Result<Game> _games;
 
         // Business constructor
         public Individual(
@@ -142,7 +132,6 @@ namespace MyImproving.Model
         private void InitializeResults()
         {
             _companies = new Result<Company>(this, QueryCompanies);
-            _games = new Result<Game>(this, QueryGames);
         }
 
         // Predecessor access
@@ -157,10 +146,6 @@ namespace MyImproving.Model
         public Result<Company> Companies
         {
             get { return _companies; }
-        }
-        public Result<Game> Games
-        {
-            get { return _games; }
         }
 
         // Mutable property access
@@ -344,6 +329,13 @@ namespace MyImproving.Model
             ;
 		}
         public static Query QueryName = MakeQueryName();
+        public static Query MakeQueryGames()
+		{
+			return new Query()
+				.JoinSuccessors(Game.RoleCompanies)
+            ;
+		}
+        public static Query QueryGames = MakeQueryGames();
 
         // Predicates
 
@@ -357,6 +349,7 @@ namespace MyImproving.Model
 
         // Results
         private Result<Company__name> _name;
+        private Result<Game> _games;
 
         // Business constructor
         public Company(
@@ -379,6 +372,7 @@ namespace MyImproving.Model
         private void InitializeResults()
         {
             _name = new Result<Company__name>(this, QueryName);
+            _games = new Result<Game>(this, QueryGames);
         }
 
         // Predecessor access
@@ -392,6 +386,10 @@ namespace MyImproving.Model
 
 
         // Query result access
+        public Result<Game> Games
+        {
+            get { return _games; }
+        }
 
         // Mutable property access
         public TransientDisputable<Company__name, string> Name
@@ -2548,9 +2546,6 @@ namespace MyImproving.Model
 			community.AddQuery(
 				Individual._correspondenceFactType,
 				Individual.QueryCompanies.QueryDefinition);
-			community.AddQuery(
-				Individual._correspondenceFactType,
-				Individual.QueryGames.QueryDefinition);
 			community.AddType(
 				Domain._correspondenceFactType,
 				new Domain.CorrespondenceFactFactory(fieldSerializerByType),
@@ -2568,6 +2563,9 @@ namespace MyImproving.Model
 			community.AddQuery(
 				Company._correspondenceFactType,
 				Company.QueryName.QueryDefinition);
+			community.AddQuery(
+				Company._correspondenceFactType,
+				Company.QueryGames.QueryDefinition);
 			community.AddType(
 				Company__name._correspondenceFactType,
 				new Company__name.CorrespondenceFactFactory(fieldSerializerByType),

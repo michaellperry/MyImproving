@@ -9,12 +9,6 @@ query:
 		Director d : d.individual = this
 		Company c : c = d.company
 	}
-
-	Game* games {
-		Director d : d.individual = this
-		Company c : c = d.company
-		Game g : g.companies = c
-	}
 }
 
 fact Domain {
@@ -38,6 +32,11 @@ key:
 
 mutable:
 	string name;
+
+query:
+	Game* games {
+		Game g : g.companies = this
+	}
 }
 
 fact Director {

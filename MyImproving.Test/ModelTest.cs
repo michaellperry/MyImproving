@@ -74,7 +74,7 @@ namespace MyImproving.Test
 
             Synchronize();
 
-            List<Game> gamesAlan = _individualAlan.Games.ToList();
+            List<Game> gamesAlan = companyAlan.Games.ToList();
             Assert.AreEqual(1, gamesAlan.Count);
             Assert.AreEqual(2, gamesAlan[0].Companies.Count());
         }

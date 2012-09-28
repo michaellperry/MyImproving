@@ -16,6 +16,7 @@
         
         <StackPanel Orientation="Horizontal">
             <local:CompanySelectionControl DataContext="{Binding CompanySelection}" HorizontalAlignment="Left" d:LayoutOverrides="Height"/>
+            <local:GameSelectionControl DataContext="{Binding GameSelection}" HorizontalAlignment="Left" d:LayoutOverrides="Height"/>
         </StackPanel>
 
     </Grid>

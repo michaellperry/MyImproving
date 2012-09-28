@@ -94,10 +94,16 @@
     </Compile>
     <Compile Include="HTTPConfigurationProvider.cs" />
     <Compile Include="Models\CompanySelectionModel.cs" />
+    <Compile Include="Models\GameSelectionModel.cs" />
     <Compile Include="ViewModels\CompanyHeaderViewModel.cs" />
     <Compile Include="ViewModels\CompanySelectionViewModel.cs" />
+    <Compile Include="ViewModels\GameHeaderViewModel.cs" />
+    <Compile Include="ViewModels\GameSelectionViewModel.cs" />
     <Compile Include="Views\CompanySelectionControl.xaml.cs">
       <DependentUpon>CompanySelectionControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\GameSelectionControl.xaml.cs">
+      <DependentUpon>GameSelectionControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
@@ -113,6 +119,10 @@
       <Generator>MSBuild:Compile</Generator>
     </ApplicationDefinition>
     <Page Include="Views\CompanySelectionControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\GameSelectionControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
