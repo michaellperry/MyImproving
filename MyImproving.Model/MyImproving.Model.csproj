@@ -64,7 +64,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Candidate.cs" />
+    <Compile Include="CandidateDeck.cs" />
     <Compile Include="Domain.cs" />
+    <Compile Include="Game.cs" />
     <Compile Include="Individual.cs" />
     <Compile Include="Model.generated.cs">
       <AutoGen>True</AutoGen>
@@ -72,6 +75,7 @@
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Round.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Model.fact" />

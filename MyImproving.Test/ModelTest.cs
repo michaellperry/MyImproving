@@ -1,49 +1,17 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.Silverlight.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using UpdateControls.Correspondence;
-using UpdateControls.Correspondence.Memory;
 using MyImproving.Model;
 
 namespace MyImproving.Test
 {
     [TestClass]
-    public class ModelTest
+    public class ModelTest : TestBase
     {
-        private Community _communityFlynn;
-        private Community _communityAlan;
-        private Community _communityModerator;
-        private Individual _individualFlynn;
-        private Individual _individualAlan;
-        private Domain _domainModerator;
-
         [TestInitialize]
         public void Initialize()
         {
-            var sharedCommunication = new MemoryCommunicationStrategy();
-            _communityFlynn = new Community(new MemoryStorageStrategy())
-                .AddCommunicationStrategy(sharedCommunication)
-                .Register<CorrespondenceModel>()
-                .Subscribe(() => _individualFlynn)
-                .Subscribe(() => _individualFlynn.Companies)
-				;
-            _communityAlan = new Community(new MemoryStorageStrategy())
-                .AddCommunicationStrategy(sharedCommunication)
-                .Register<CorrespondenceModel>()
-                .Subscribe(() => _individualAlan)
-                .Subscribe(() => _individualAlan.Companies)
-                ;
-            _communityModerator = new Community(new MemoryStorageStrategy())
-                .AddCommunicationStrategy(sharedCommunication)
-                .Register<CorrespondenceModel>()
-                .Subscribe(() => _domainModerator)
-                ;
-
-            _individualFlynn = _communityFlynn.AddFact(new Individual("flynn"));
-            _individualAlan = _communityAlan.AddFact(new Individual("alan"));
-            _domainModerator = _communityModerator.AddFact(new Domain("Improving Enterprises"));
+            InitializeCommunity();
         }
 
         [TestMethod]
@@ -78,13 +46,5 @@ namespace MyImproving.Test
             Assert.AreEqual(1, gamesAlan.Count);
             Assert.AreEqual(2, gamesAlan[0].Companies.Count());
         }
-
-        private void Synchronize()
-        {
-            while (
-                _communityFlynn.Synchronize() ||
-                _communityAlan.Synchronize() ||
-                _communityModerator.Synchronize()) ;
-        }
-	}
+    }
 }

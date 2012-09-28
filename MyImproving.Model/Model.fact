@@ -9,6 +9,12 @@ query:
 		Director d : d.individual = this
 		Company c : c = d.company
 	}
+
+	Game* games {
+		Director d : d.individual = this
+		Company c : c = d.company
+		Game g : g.companies = c
+	}
 }
 
 fact Domain {
@@ -53,12 +59,22 @@ key:
 
 mutable:
 	string name;
+
+query:
+	Round* rounds {
+		Round r : r.game = this
+	}
 }
 
 fact Round {
 key:
 	publish Game game;
 	int index;
+
+query:
+	Candidate* candidates {
+		Candidate c : c.round = this
+	}
 }
 
 fact Turn {
@@ -84,6 +100,7 @@ key:
 	unique;
 	Round round;
 	int skill;
+	int relationship;
 }
 
 fact Offer {

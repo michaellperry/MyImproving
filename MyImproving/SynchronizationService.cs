@@ -26,6 +26,7 @@ namespace MyImproving
                 .Register<CorrespondenceModel>()
                 .Subscribe(() => _individual)
                 .Subscribe(() => _individual.Companies)
+                .Subscribe(() => _individual.Games)
                 ;
 
             _individual = _community.LoadFact<Individual>(ThisIndividual);

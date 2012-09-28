@@ -102,6 +102,15 @@ namespace MyImproving.Model
             ;
 		}
         public static Query QueryCompanies = MakeQueryCompanies();
+        public static Query MakeQueryGames()
+		{
+			return new Query()
+				.JoinSuccessors(Director.RoleIndividual)
+				.JoinPredecessors(Director.RoleCompany)
+				.JoinSuccessors(Game.RoleCompanies)
+            ;
+		}
+        public static Query QueryGames = MakeQueryGames();
 
         // Predicates
 
@@ -112,6 +121,7 @@ namespace MyImproving.Model
 
         // Results
         private Result<Company> _companies;
+        private Result<Game> _games;
 
         // Business constructor
         public Individual(
@@ -132,6 +142,7 @@ namespace MyImproving.Model
         private void InitializeResults()
         {
             _companies = new Result<Company>(this, QueryCompanies);
+            _games = new Result<Game>(this, QueryGames);
         }
 
         // Predecessor access
@@ -146,6 +157,10 @@ namespace MyImproving.Model
         public Result<Company> Companies
         {
             get { return _companies; }
+        }
+        public Result<Game> Games
+        {
+            get { return _games; }
         }
 
         // Mutable property access
@@ -705,6 +720,13 @@ namespace MyImproving.Model
             ;
 		}
         public static Query QueryName = MakeQueryName();
+        public static Query MakeQueryRounds()
+		{
+			return new Query()
+				.JoinSuccessors(Round.RoleGame)
+            ;
+		}
+        public static Query QueryRounds = MakeQueryRounds();
 
         // Predicates
 
@@ -719,6 +741,7 @@ namespace MyImproving.Model
 
         // Results
         private Result<Game__name> _name;
+        private Result<Round> _rounds;
 
         // Business constructor
         public Game(
@@ -744,6 +767,7 @@ namespace MyImproving.Model
         private void InitializeResults()
         {
             _name = new Result<Game__name>(this, QueryName);
+            _rounds = new Result<Round>(this, QueryRounds);
         }
 
         // Predecessor access
@@ -761,6 +785,10 @@ namespace MyImproving.Model
 
 
         // Query result access
+        public Result<Round> Rounds
+        {
+            get { return _rounds; }
+        }
 
         // Mutable property access
         public TransientDisputable<Game__name, string> Name
@@ -955,6 +983,13 @@ namespace MyImproving.Model
 			true));
 
         // Queries
+        public static Query MakeQueryCandidates()
+		{
+			return new Query()
+				.JoinSuccessors(Candidate.RoleRound)
+            ;
+		}
+        public static Query QueryCandidates = MakeQueryCandidates();
 
         // Predicates
 
@@ -965,6 +1000,7 @@ namespace MyImproving.Model
         private int _index;
 
         // Results
+        private Result<Candidate> _candidates;
 
         // Business constructor
         public Round(
@@ -987,6 +1023,7 @@ namespace MyImproving.Model
         // Result initializer
         private void InitializeResults()
         {
+            _candidates = new Result<Candidate>(this, QueryCandidates);
         }
 
         // Predecessor access
@@ -1002,6 +1039,10 @@ namespace MyImproving.Model
         }
 
         // Query result access
+        public Result<Candidate> Candidates
+        {
+            get { return _candidates; }
+        }
 
         // Mutable property access
 
@@ -1346,6 +1387,7 @@ namespace MyImproving.Model
 					{
 						newFact._unique = (Guid)_fieldSerializerByType[typeof(Guid)].ReadData(output);
 						newFact._skill = (int)_fieldSerializerByType[typeof(int)].ReadData(output);
+						newFact._relationship = (int)_fieldSerializerByType[typeof(int)].ReadData(output);
 					}
 				}
 
@@ -1357,6 +1399,7 @@ namespace MyImproving.Model
 				Candidate fact = (Candidate)obj;
 				_fieldSerializerByType[typeof(Guid)].WriteData(output, fact._unique);
 				_fieldSerializerByType[typeof(int)].WriteData(output, fact._skill);
+				_fieldSerializerByType[typeof(int)].WriteData(output, fact._relationship);
 			}
 		}
 
@@ -1388,6 +1431,7 @@ namespace MyImproving.Model
 
         // Fields
         private int _skill;
+        private int _relationship;
 
         // Results
 
@@ -1395,12 +1439,14 @@ namespace MyImproving.Model
         public Candidate(
             Round round
             ,int skill
+            ,int relationship
             )
         {
             _unique = Guid.NewGuid();
             InitializeResults();
             _round = new PredecessorObj<Round>(this, RoleRound, round);
             _skill = skill;
+            _relationship = relationship;
         }
 
         // Hydration constructor
@@ -1427,6 +1473,10 @@ namespace MyImproving.Model
         public int Skill
         {
             get { return _skill; }
+        }
+        public int Relationship
+        {
+            get { return _relationship; }
         }
 
         // Query result access
@@ -2546,6 +2596,9 @@ namespace MyImproving.Model
 			community.AddQuery(
 				Individual._correspondenceFactType,
 				Individual.QueryCompanies.QueryDefinition);
+			community.AddQuery(
+				Individual._correspondenceFactType,
+				Individual.QueryGames.QueryDefinition);
 			community.AddType(
 				Domain._correspondenceFactType,
 				new Domain.CorrespondenceFactFactory(fieldSerializerByType),
@@ -2584,6 +2637,9 @@ namespace MyImproving.Model
 			community.AddQuery(
 				Game._correspondenceFactType,
 				Game.QueryName.QueryDefinition);
+			community.AddQuery(
+				Game._correspondenceFactType,
+				Game.QueryRounds.QueryDefinition);
 			community.AddType(
 				Game__name._correspondenceFactType,
 				new Game__name.CorrespondenceFactFactory(fieldSerializerByType),
@@ -2595,6 +2651,9 @@ namespace MyImproving.Model
 				Round._correspondenceFactType,
 				new Round.CorrespondenceFactFactory(fieldSerializerByType),
 				new FactMetadata(new List<CorrespondenceFactType> { Round._correspondenceFactType }));
+			community.AddQuery(
+				Round._correspondenceFactType,
+				Round.QueryCandidates.QueryDefinition);
 			community.AddType(
 				Turn._correspondenceFactType,
 				new Turn.CorrespondenceFactFactory(fieldSerializerByType),
