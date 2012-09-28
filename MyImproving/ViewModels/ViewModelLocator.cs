@@ -2,6 +2,7 @@ using System;
 using System.ComponentModel;
 using System.Linq;
 using UpdateControls.XAML;
+using MyImproving.Models;
 
 namespace MyImproving.ViewModels
 {
@@ -16,7 +17,12 @@ namespace MyImproving.ViewModels
             _synchronizationService = new SynchronizationService();
             if (!DesignerProperties.IsInDesignTool)
                 _synchronizationService.Initialize();
-            _main = new MainViewModel(_synchronizationService.Community, _synchronizationService);
+
+            CompanySelectionModel companySelection = new CompanySelectionModel();
+            _main = new MainViewModel(
+                _synchronizationService.Community,
+                _synchronizationService,
+                companySelection);
         }
 
         public object Main

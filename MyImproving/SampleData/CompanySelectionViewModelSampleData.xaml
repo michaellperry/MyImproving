@@ -1,0 +1,14 @@
+﻿<MyImproving_ViewModels:CompanySelectionViewModel xmlns:MyImproving_ViewModels="clr-namespace:MyImproving.ViewModels" CompanyName="Amet morbi aliquam consequat" CompanySelectionHeader="&lt;Create a Company&gt;">
+	<MyImproving_ViewModels:CompanySelectionViewModel.Companies>
+		<MyImproving_ViewModels:CompanyHeaderViewModel Name="Nam aenean"/>
+		<MyImproving_ViewModels:CompanyHeaderViewModel Name="Cras class sed"/>
+		<MyImproving_ViewModels:CompanyHeaderViewModel Name="Maecenas curabitur"/>
+		<MyImproving_ViewModels:CompanyHeaderViewModel Name="Mauris curae aliquam"/>
+		<MyImproving_ViewModels:CompanyHeaderViewModel Name="Integer duis"/>
+		<MyImproving_ViewModels:CompanyHeaderViewModel Name="Dis donec praesent est"/>
+		<MyImproving_ViewModels:CompanyHeaderViewModel Name="Quisque phasellus accumsan nullam aptent"/>
+		<MyImproving_ViewModels:CompanyHeaderViewModel Name="Vestibulum hac nunc"/>
+		<MyImproving_ViewModels:CompanyHeaderViewModel Name="Etiam auctor fusce"/>
+		<MyImproving_ViewModels:CompanyHeaderViewModel Name="Congue bibendum lorem vivamus"/>
+	</MyImproving_ViewModels:CompanySelectionViewModel.Companies>
+</MyImproving_ViewModels:CompanySelectionViewModel>

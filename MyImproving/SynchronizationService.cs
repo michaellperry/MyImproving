@@ -22,9 +22,10 @@ namespace MyImproving
         {
             HTTPConfigurationProvider configurationProvider = new HTTPConfigurationProvider();
             _community = new Community(IsolatedStorageStorageStrategy.Load())
-                .AddAsynchronousCommunicationStrategy(new BinaryHTTPAsynchronousCommunicationStrategy(configurationProvider))
+                //.AddAsynchronousCommunicationStrategy(new BinaryHTTPAsynchronousCommunicationStrategy(configurationProvider))
                 .Register<CorrespondenceModel>()
                 .Subscribe(() => _individual)
+                .Subscribe(() => _individual.Companies)
                 ;
 
             _individual = _community.LoadFact<Individual>(ThisIndividual);
