@@ -93,8 +93,9 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="HTTPConfigurationProvider.cs" />
-    <Compile Include="Models\CompanySelectionModel.cs" />
+    <Compile Include="Models\NewGameSelectionModel.cs" />
     <Compile Include="ViewModels\CompanyHeaderViewModel.cs" />
+    <Compile Include="ViewModels\GameHeaderViewModel.cs" />
     <Compile Include="ViewModels\NewGameViewModel.cs" />
     <Compile Include="Views\MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
@@ -135,6 +136,9 @@
     <Content Include="Readme_Correspondence.txt" />
   </ItemGroup>
   <ItemGroup>
+    <DesignData Include="SampleData\MainViewModelSampleData.xaml">
+      <Generator>MSBuild:MarkupCompilePass1</Generator>
+    </DesignData>
     <DesignData Include="SampleData\NewGameViewModelSampleData.xaml">
       <Generator>MSBuild:MarkupCompilePass1</Generator>
     </DesignData>

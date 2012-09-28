@@ -14,17 +14,28 @@ namespace MyImproving.Moderator.ViewModels
         private readonly SynchronizationService _synhronizationService;
         private readonly NewGameViewModel _newGame;
 
-        public MainViewModel(Community community, SynchronizationService synhronizationService, CompanySelectionModel companySelection)
+        public MainViewModel(Community community, SynchronizationService synhronizationService, NewGameSelectionModel newGameSelection)
         {
             _community = community;
             _synhronizationService = synhronizationService;
 
-            _newGame = new NewGameViewModel(synhronizationService.Domain, companySelection);
+            _newGame = new NewGameViewModel(synhronizationService.Domain, newGameSelection);
         }
 
         public NewGameViewModel NewGame
         {
             get { return _newGame; }
+        }
+
+        public IEnumerable<GameHeaderViewModel> Games
+        {
+            get
+            {
+                return
+                    from game in _synhronizationService.Domain.Games
+                    orderby game.Name.Value
+                    select new GameHeaderViewModel(game);
+            }
         }
 
         public bool Synchronizing

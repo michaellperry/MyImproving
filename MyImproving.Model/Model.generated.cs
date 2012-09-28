@@ -18,6 +18,8 @@ digraph "MyImproving.Model"
     Director -> Company
     Game -> Domain [color="red"]
     Game -> Company [label="  *"] [color="red"]
+    Game__name -> Game
+    Game__name -> Game__name [label="  *"]
     Round -> Game [color="red"]
     Turn -> Company [color="red"]
     Turn -> Round
@@ -219,6 +221,13 @@ namespace MyImproving.Model
             ;
 		}
         public static Query QueryCompanies = MakeQueryCompanies();
+        public static Query MakeQueryGames()
+		{
+			return new Query()
+				.JoinSuccessors(Game.RoleDomain)
+            ;
+		}
+        public static Query QueryGames = MakeQueryGames();
 
         // Predicates
 
@@ -229,6 +238,7 @@ namespace MyImproving.Model
 
         // Results
         private Result<Company> _companies;
+        private Result<Game> _games;
 
         // Business constructor
         public Domain(
@@ -249,6 +259,7 @@ namespace MyImproving.Model
         private void InitializeResults()
         {
             _companies = new Result<Company>(this, QueryCompanies);
+            _games = new Result<Game>(this, QueryGames);
         }
 
         // Predecessor access
@@ -263,6 +274,10 @@ namespace MyImproving.Model
         public Result<Company> Companies
         {
             get { return _companies; }
+        }
+        public Result<Game> Games
+        {
+            get { return _games; }
         }
 
         // Mutable property access
@@ -684,6 +699,14 @@ namespace MyImproving.Model
 			true));
 
         // Queries
+        public static Query MakeQueryName()
+		{
+			return new Query()
+				.JoinSuccessors(Game__name.RoleGame, Condition.WhereIsEmpty(Game__name.MakeQueryIsCurrent())
+				)
+            ;
+		}
+        public static Query QueryName = MakeQueryName();
 
         // Predicates
 
@@ -697,6 +720,7 @@ namespace MyImproving.Model
         // Fields
 
         // Results
+        private Result<Game__name> _name;
 
         // Business constructor
         public Game(
@@ -721,6 +745,7 @@ namespace MyImproving.Model
         // Result initializer
         private void InitializeResults()
         {
+            _name = new Result<Game__name>(this, QueryName);
         }
 
         // Predecessor access
@@ -736,6 +761,143 @@ namespace MyImproving.Model
         // Field access
 		public Guid Unique { get { return _unique; } }
 
+
+        // Query result access
+
+        // Mutable property access
+        public TransientDisputable<Game__name, string> Name
+        {
+            get { return _name.AsTransientDisputable(fact => fact.Value); }
+			set
+			{
+				var current = _name.Ensure().ToList();
+				if (current.Count != 1 || !object.Equals(current[0].Value, value.Value))
+				{
+					Community.AddFact(new Game__name(this, _name, value.Value));
+				}
+			}
+        }
+
+    }
+    
+    public partial class Game__name : CorrespondenceFact
+    {
+		// Factory
+		internal class CorrespondenceFactFactory : ICorrespondenceFactFactory
+		{
+			private IDictionary<Type, IFieldSerializer> _fieldSerializerByType;
+
+			public CorrespondenceFactFactory(IDictionary<Type, IFieldSerializer> fieldSerializerByType)
+			{
+				_fieldSerializerByType = fieldSerializerByType;
+			}
+
+			public CorrespondenceFact CreateFact(FactMemento memento)
+			{
+				Game__name newFact = new Game__name(memento);
+
+				// Create a memory stream from the memento data.
+				using (MemoryStream data = new MemoryStream(memento.Data))
+				{
+					using (BinaryReader output = new BinaryReader(data))
+					{
+						newFact._value = (string)_fieldSerializerByType[typeof(string)].ReadData(output);
+					}
+				}
+
+				return newFact;
+			}
+
+			public void WriteFactData(CorrespondenceFact obj, BinaryWriter output)
+			{
+				Game__name fact = (Game__name)obj;
+				_fieldSerializerByType[typeof(string)].WriteData(output, fact._value);
+			}
+		}
+
+		// Type
+		internal static CorrespondenceFactType _correspondenceFactType = new CorrespondenceFactType(
+			"MyImproving.Model.Game__name", 1);
+
+		protected override CorrespondenceFactType GetCorrespondenceFactType()
+		{
+			return _correspondenceFactType;
+		}
+
+        // Roles
+        public static Role RoleGame = new Role(new RoleMemento(
+			_correspondenceFactType,
+			"game",
+			new CorrespondenceFactType("MyImproving.Model.Game", 1),
+			false));
+        public static Role RolePrior = new Role(new RoleMemento(
+			_correspondenceFactType,
+			"prior",
+			new CorrespondenceFactType("MyImproving.Model.Game__name", 1),
+			false));
+
+        // Queries
+        public static Query MakeQueryIsCurrent()
+		{
+			return new Query()
+				.JoinSuccessors(Game__name.RolePrior)
+            ;
+		}
+        public static Query QueryIsCurrent = MakeQueryIsCurrent();
+
+        // Predicates
+        public static Condition IsCurrent = Condition.WhereIsEmpty(QueryIsCurrent);
+
+        // Predecessors
+        private PredecessorObj<Game> _game;
+        private PredecessorList<Game__name> _prior;
+
+        // Fields
+        private string _value;
+
+        // Results
+
+        // Business constructor
+        public Game__name(
+            Game game
+            ,IEnumerable<Game__name> prior
+            ,string value
+            )
+        {
+            InitializeResults();
+            _game = new PredecessorObj<Game>(this, RoleGame, game);
+            _prior = new PredecessorList<Game__name>(this, RolePrior, prior);
+            _value = value;
+        }
+
+        // Hydration constructor
+        private Game__name(FactMemento memento)
+        {
+            InitializeResults();
+            _game = new PredecessorObj<Game>(this, RoleGame, memento);
+            _prior = new PredecessorList<Game__name>(this, RolePrior, memento);
+        }
+
+        // Result initializer
+        private void InitializeResults()
+        {
+        }
+
+        // Predecessor access
+        public Game Game
+        {
+            get { return _game.Fact; }
+        }
+        public IEnumerable<Game__name> Prior
+        {
+            get { return _prior; }
+        }
+     
+        // Field access
+        public string Value
+        {
+            get { return _value; }
+        }
 
         // Query result access
 
@@ -2396,6 +2558,9 @@ namespace MyImproving.Model
 			community.AddQuery(
 				Domain._correspondenceFactType,
 				Domain.QueryCompanies.QueryDefinition);
+			community.AddQuery(
+				Domain._correspondenceFactType,
+				Domain.QueryGames.QueryDefinition);
 			community.AddType(
 				Company._correspondenceFactType,
 				new Company.CorrespondenceFactFactory(fieldSerializerByType),
@@ -2418,6 +2583,16 @@ namespace MyImproving.Model
 				Game._correspondenceFactType,
 				new Game.CorrespondenceFactFactory(fieldSerializerByType),
 				new FactMetadata(new List<CorrespondenceFactType> { Game._correspondenceFactType }));
+			community.AddQuery(
+				Game._correspondenceFactType,
+				Game.QueryName.QueryDefinition);
+			community.AddType(
+				Game__name._correspondenceFactType,
+				new Game__name.CorrespondenceFactFactory(fieldSerializerByType),
+				new FactMetadata(new List<CorrespondenceFactType> { Game__name._correspondenceFactType }));
+			community.AddQuery(
+				Game__name._correspondenceFactType,
+				Game__name.QueryIsCurrent.QueryDefinition);
 			community.AddType(
 				Round._correspondenceFactType,
 				new Round.CorrespondenceFactFactory(fieldSerializerByType),

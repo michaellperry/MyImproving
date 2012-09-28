@@ -1,12 +1,20 @@
 ﻿using System.Collections.Generic;
 using MyImproving.Model;
 using UpdateControls.Collections;
+using UpdateControls.Fields;
 
 namespace MyImproving.Moderator.Models
 {
-    public class CompanySelectionModel
+    public class NewGameSelectionModel
     {
+        private Independent<string> _gameName = new Independent<string>();
         private IndependentList<Company> _selectedCompanies = new IndependentList<Company>();
+
+        public string GameName
+        {
+            get { return _gameName; }
+            set { _gameName.Value = value; }
+        }
 
         public IEnumerable<Company> SelectedCompanies
         {

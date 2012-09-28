@@ -5,12 +5,23 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:local="clr-namespace:MyImproving.Moderator.Views" x:Class="MyImproving.Moderator.Views.MainPage"
     mc:Ignorable="d"
-    d:DesignHeight="300" d:DesignWidth="400"
+    d:DesignHeight="480" d:DesignWidth="626"
     DataContext="{Binding Main, Source={StaticResource Locator}}">
+	<UserControl.Resources>
+		<DataTemplate x:Key="GameHeaderViewModelTemplate">
+			<StackPanel>
+				<TextBlock Text="{Binding Name}" FontSize="16"/>
+			</StackPanel>
+		</DataTemplate>
+	</UserControl.Resources>
 
-    <Grid x:Name="LayoutRoot" Background="White">
-
-    	<local:NewGameControl DataContext="{Binding NewGame}"/>
+    <Grid x:Name="LayoutRoot" Background="White" d:DataContext="{d:DesignData /SampleData/MainViewModelSampleData.xaml}">
+    	<Grid.RowDefinitions>
+    		<RowDefinition Height="Auto"/>
+    		<RowDefinition/>
+    	</Grid.RowDefinitions>
+        <local:NewGameControl DataContext="{Binding NewGame}"/>
+        <ListBox ItemTemplate="{StaticResource GameHeaderViewModelTemplate}" ItemsSource="{Binding Games}" Grid.Row="1" Margin="4"/>
 
     </Grid>
 </UserControl>

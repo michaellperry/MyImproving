@@ -18,8 +18,8 @@ namespace MyImproving.Moderator.ViewModels
             if (!DesignerProperties.IsInDesignTool)
                 _synchronizationService.Initialize();
 
-            CompanySelectionModel companySelection = new CompanySelectionModel();
-            _main = new MainViewModel(_synchronizationService.Community, _synchronizationService, companySelection);
+            NewGameSelectionModel newGameSelection = new NewGameSelectionModel();
+            _main = new MainViewModel(_synchronizationService.Community, _synchronizationService, newGameSelection);
         }
 
         public object Main

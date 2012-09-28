@@ -10,9 +10,9 @@ namespace MyImproving.Moderator.ViewModels
     public class CompanyHeaderViewModel
     {
         private readonly Company _company;
-        private readonly CompanySelectionModel _selection;
+        private readonly NewGameSelectionModel _selection;
         
-        public CompanyHeaderViewModel(Company company, CompanySelectionModel selection)
+        public CompanyHeaderViewModel(Company company, NewGameSelectionModel selection)
         {
             _company = company;
             _selection = selection;

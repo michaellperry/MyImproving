@@ -1,0 +1,30 @@
+<MyImproving_Moderator_ViewModels:MainViewModel xmlns:MyImproving_Moderator_ViewModels="clr-namespace:MyImproving.Moderator.ViewModels" Synchronizing="True">
+	<MyImproving_Moderator_ViewModels:MainViewModel.Games>
+		<MyImproving_Moderator_ViewModels:GameHeaderViewModel Name="Class maecenas praesent curae"/>
+		<MyImproving_Moderator_ViewModels:GameHeaderViewModel Name="Curabitur phasellus vestibulum"/>
+		<MyImproving_Moderator_ViewModels:GameHeaderViewModel Name="Aliquam cras"/>
+		<MyImproving_Moderator_ViewModels:GameHeaderViewModel Name="Adipiscing integer"/>
+		<MyImproving_Moderator_ViewModels:GameHeaderViewModel Name="Nam quisque consequat duis donec"/>
+		<MyImproving_Moderator_ViewModels:GameHeaderViewModel Name="Aenean convallis mauris nullam aptent"/>
+		<MyImproving_Moderator_ViewModels:GameHeaderViewModel Name="Dignissim nunc accumsan vivamus"/>
+		<MyImproving_Moderator_ViewModels:GameHeaderViewModel Name="Sed dis parturient"/>
+		<MyImproving_Moderator_ViewModels:GameHeaderViewModel Name="Auctor aliquam bibendum amet ante"/>
+		<MyImproving_Moderator_ViewModels:GameHeaderViewModel Name="Elementum est etiam fusce congue"/>
+	</MyImproving_Moderator_ViewModels:MainViewModel.Games>
+	<MyImproving_Moderator_ViewModels:MainViewModel.NewGame>
+		<MyImproving_Moderator_ViewModels:NewGameViewModel GameName="Per lobortis">
+			<MyImproving_Moderator_ViewModels:NewGameViewModel.Companies>
+				<MyImproving_Moderator_ViewModels:CompanyHeaderViewModel IsSelected="True" Name="Aliquet dictumst facilisis cursus"/>
+				<MyImproving_Moderator_ViewModels:CompanyHeaderViewModel IsSelected="False" Name="Fermentum dictum lectus libero vestibulum"/>
+				<MyImproving_Moderator_ViewModels:CompanyHeaderViewModel IsSelected="True" Name="Fringilla blandit hac"/>
+				<MyImproving_Moderator_ViewModels:CompanyHeaderViewModel IsSelected="False" Name="Ligula eleifend leo habitasse"/>
+				<MyImproving_Moderator_ViewModels:CompanyHeaderViewModel IsSelected="True" Name="Vestibulum litora"/>
+				<MyImproving_Moderator_ViewModels:CompanyHeaderViewModel IsSelected="False" Name="Commodo adipiscing"/>
+				<MyImproving_Moderator_ViewModels:CompanyHeaderViewModel IsSelected="True" Name="Facilisi faucibus habitant mus arcu"/>
+				<MyImproving_Moderator_ViewModels:CompanyHeaderViewModel IsSelected="False" Name="Conubia diam luctus"/>
+				<MyImproving_Moderator_ViewModels:CompanyHeaderViewModel IsSelected="True" Name="Parturient hendrerit himenaeos vestibulum vestibulum"/>
+				<MyImproving_Moderator_ViewModels:CompanyHeaderViewModel IsSelected="False" Name="Nec lorem inceptos interdum non"/>
+			</MyImproving_Moderator_ViewModels:NewGameViewModel.Companies>
+		</MyImproving_Moderator_ViewModels:NewGameViewModel>
+	</MyImproving_Moderator_ViewModels:MainViewModel.NewGame>
+</MyImproving_Moderator_ViewModels:MainViewModel>

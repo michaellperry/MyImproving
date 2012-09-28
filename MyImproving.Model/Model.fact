@@ -25,6 +25,10 @@ query:
 	Company* companies {
 		Company c : c.domain = this
 	}
+
+	Game* games {
+		Game g : g.domain = this
+	}
 }
 
 fact Company {
@@ -47,6 +51,9 @@ key:
 	unique;
 	publish Domain domain;
 	publish Company* companies;
+
+mutable:
+	string name;
 }
 
 fact Round {
