@@ -75,12 +75,21 @@ query:
 	Candidate* candidates {
 		Candidate c : c.round = this
 	}
+
+	Turn* turns {
+		Turn t : t.round = this
+	}
 }
 
 fact Turn {
 key:
 	publish Company company;
 	Round round;
+
+query:
+	Hire* hires {
+		Hire h : h.offer.turn = this
+	}
 }
 
 fact Borrow {

@@ -990,6 +990,13 @@ namespace MyImproving.Model
             ;
 		}
         public static Query QueryCandidates = MakeQueryCandidates();
+        public static Query MakeQueryTurns()
+		{
+			return new Query()
+				.JoinSuccessors(Turn.RoleRound)
+            ;
+		}
+        public static Query QueryTurns = MakeQueryTurns();
 
         // Predicates
 
@@ -1001,6 +1008,7 @@ namespace MyImproving.Model
 
         // Results
         private Result<Candidate> _candidates;
+        private Result<Turn> _turns;
 
         // Business constructor
         public Round(
@@ -1024,6 +1032,7 @@ namespace MyImproving.Model
         private void InitializeResults()
         {
             _candidates = new Result<Candidate>(this, QueryCandidates);
+            _turns = new Result<Turn>(this, QueryTurns);
         }
 
         // Predecessor access
@@ -1042,6 +1051,10 @@ namespace MyImproving.Model
         public Result<Candidate> Candidates
         {
             get { return _candidates; }
+        }
+        public Result<Turn> Turns
+        {
+            get { return _turns; }
         }
 
         // Mutable property access
@@ -1103,6 +1116,14 @@ namespace MyImproving.Model
 			false));
 
         // Queries
+        public static Query MakeQueryHires()
+		{
+			return new Query()
+				.JoinSuccessors(Offer.RoleTurn)
+				.JoinSuccessors(Hire.RoleOffer)
+            ;
+		}
+        public static Query QueryHires = MakeQueryHires();
 
         // Predicates
 
@@ -1113,6 +1134,7 @@ namespace MyImproving.Model
         // Fields
 
         // Results
+        private Result<Hire> _hires;
 
         // Business constructor
         public Turn(
@@ -1136,6 +1158,7 @@ namespace MyImproving.Model
         // Result initializer
         private void InitializeResults()
         {
+            _hires = new Result<Hire>(this, QueryHires);
         }
 
         // Predecessor access
@@ -1151,6 +1174,10 @@ namespace MyImproving.Model
         // Field access
 
         // Query result access
+        public Result<Hire> Hires
+        {
+            get { return _hires; }
+        }
 
         // Mutable property access
 
@@ -2680,10 +2707,16 @@ namespace MyImproving.Model
 			community.AddQuery(
 				Round._correspondenceFactType,
 				Round.QueryCandidates.QueryDefinition);
+			community.AddQuery(
+				Round._correspondenceFactType,
+				Round.QueryTurns.QueryDefinition);
 			community.AddType(
 				Turn._correspondenceFactType,
 				new Turn.CorrespondenceFactFactory(fieldSerializerByType),
 				new FactMetadata(new List<CorrespondenceFactType> { Turn._correspondenceFactType }));
+			community.AddQuery(
+				Turn._correspondenceFactType,
+				Turn.QueryHires.QueryDefinition);
 			community.AddType(
 				Borrow._correspondenceFactType,
 				new Borrow.CorrespondenceFactFactory(fieldSerializerByType),

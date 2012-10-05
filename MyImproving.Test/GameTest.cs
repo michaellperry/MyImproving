@@ -1,41 +1,34 @@
 ﻿using System;
-using System.Net;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Documents;
-using System.Windows.Ink;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Animation;
-using System.Windows.Shapes;
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MyImproving.Model;
-using System.Linq;
-using System.Collections.Generic;
 using MyImproving.Model.Services;
+using MyImproving.Model.Machine;
 
 namespace MyImproving.Test
 {
     [TestClass]
     public class GameTest : TestBase
     {
-        private Company _companyAlan;
-        private Company _companyFlynn;
         private Game _gameModerator;
-        private Game _gameAlan;
-        private Game _gameFlynn;
+
+        private CompanyGameService _alan;
+        private CompanyGameService _flynn;
         private ModeratorService _moderator;
+
+        private Actuator _actuator;
 
         [TestInitialize]
         public void Initialize()
         {
             InitializeCommunity();
 
-            _companyAlan = _individualAlan.CreateCompany();
-            _companyAlan.Name = "Initech";
+            var companyAlan = _individualAlan.CreateCompany();
+            companyAlan.Name = "Encom";
 
-            _companyFlynn = _individualFlynn.CreateCompany();
-            _companyFlynn.Name = "Flynn's";
+            var companyFlynn = _individualFlynn.CreateCompany();
+            companyFlynn.Name = "Flynn's";
 
             Synchronize();
 
@@ -44,8 +37,17 @@ namespace MyImproving.Test
 
             Synchronize();
 
-            _gameAlan = _companyAlan.Games.Single();
-            _gameFlynn = _companyFlynn.Games.Single();
+            var gameAlan = companyAlan.Games.Single();
+            var gameFlynn = companyFlynn.Games.Single();
+
+            _alan = new CompanyGameService(companyAlan, gameAlan);
+            _flynn = new CompanyGameService(companyFlynn, gameFlynn);
+
+            _actuator = new Actuator();
+            _alan.RegisterWith(_actuator);
+            _flynn.RegisterWith(_actuator);
+
+            _actuator.Start();
         }
 
         [TestMethod]
@@ -54,11 +56,12 @@ namespace MyImproving.Test
             _moderator.BeginNextRound();
 
             Synchronize();
+            _actuator.Quiesce();
 
-            Assert.AreEqual(1, _gameAlan.Rounds.Count());
-            Assert.AreEqual(1, _gameAlan.Rounds.Single().Index);
-            Assert.AreEqual(1, _gameFlynn.Rounds.Count());
-            Assert.AreEqual(1, _gameFlynn.Rounds.Single().Index);
+            Assert.AreEqual(1, _alan.Turns.Count());
+            Assert.AreEqual(1, _alan.Turns.Single().Round.Index);
+            Assert.AreEqual(1, _flynn.Turns.Count());
+            Assert.AreEqual(1, _flynn.Turns.Single().Round.Index);
         }
 
         [TestMethod]
@@ -69,7 +72,7 @@ namespace MyImproving.Test
 
             Synchronize();
 
-            Round roundAlan = _gameAlan.Rounds.Single();
+            Round roundAlan = _alan._game.Rounds.Single();
             Assert.AreEqual(4, roundAlan.Candidates.Count());
             foreach (var candidate in candidates)
             {
@@ -78,7 +81,7 @@ namespace MyImproving.Test
                     c.Relationship == candidate.Relationship));
             }
 
-            Round roundFlynn = _gameFlynn.Rounds.Single();
+            Round roundFlynn = _flynn._game.Rounds.Single();
             Assert.AreEqual(4, roundFlynn.Candidates.Count());
             foreach (var candidate in candidates)
             {
@@ -96,7 +99,7 @@ namespace MyImproving.Test
 
             Synchronize();
 
-            MakeOffer(_companyFlynn, 1, candidate.Unique);
+            MakeOffer(_flynn._company, 1, candidate.Unique);
 
             Synchronize();
 
@@ -112,11 +115,11 @@ namespace MyImproving.Test
 
             Synchronize();
 
-            Offer offerAlan1 = MakeOffer(_companyAlan, 3, candidates[0].Unique);
-            Offer offerAlan2 = MakeOffer(_companyAlan, 1, candidates[1].Unique);
+            Offer offerAlan1 = MakeOffer(_alan._company, 3, candidates[0].Unique);
+            Offer offerAlan2 = MakeOffer(_alan._company, 1, candidates[1].Unique);
 
-            Offer offerFlynn1 = MakeOffer(_companyFlynn, 2, candidates[0].Unique);
-            Offer offerFlynn2 = MakeOffer(_companyFlynn, 7, candidates[1].Unique);
+            Offer offerFlynn1 = MakeOffer(_flynn._company, 2, candidates[0].Unique);
+            Offer offerFlynn2 = MakeOffer(_flynn._company, 7, candidates[1].Unique);
 
             Synchronize();
 
@@ -144,9 +147,9 @@ namespace MyImproving.Test
 
             Synchronize();
 
-            Offer offerAlan1 = MakeOffer(_companyAlan, 3, candidates[0].Unique);
+            Offer offerAlan1 = MakeOffer(_alan._company, 3, candidates[0].Unique);
 
-            Offer offerFlynn2 = MakeOffer(_companyFlynn, 7, candidates[1].Unique);
+            Offer offerFlynn2 = MakeOffer(_flynn._company, 7, candidates[1].Unique);
 
             Synchronize();
 
@@ -174,6 +177,42 @@ namespace MyImproving.Test
 
             Assert.AreEqual(0, candidates[0].Offers.Count(offer => offer.Hires.Any()));
             Assert.AreEqual(0, candidates[1].Offers.Count(offer => offer.Hires.Any()));
+        }
+
+        [TestMethod]
+        public void CandidateSelectionIsFair()
+        {
+            _moderator.BeginNextRound();
+            List<Candidate> candidates = _moderator.DealCandidates(100);
+
+            Synchronize();
+
+            foreach (var candidate in candidates)
+            {
+                MakeOffer(_alan._company, 3, candidate.Unique);
+                MakeOffer(_flynn._company, 7, candidate.Unique);
+            }
+
+            Synchronize();
+
+            _moderator.AwardCandidates();
+
+            Synchronize();
+
+            int hiresAlan = _alan._game.Rounds
+                .SelectMany(round => round.Turns)
+                .Where(turn => turn.Company == _alan._company)
+                .SelectMany(turn => turn.Hires)
+                .Count();
+            int hiresFlynn = _flynn._game.Rounds
+                .SelectMany(round => round.Turns)
+                .Where(turn => turn.Company == _flynn._company)
+                .SelectMany(turn => turn.Hires)
+                .Count();
+
+            Assert.AreEqual(100, hiresAlan + hiresFlynn);
+            // This test will sometimes fail.
+            Assert.IsTrue(25 < hiresAlan && hiresAlan < 35, String.Format("Alan hired {0} candidates. He should hire close to 30.", hiresAlan));
         }
 
         private static Offer MakeOffer(Company company, int chances, Guid candidateId)

@@ -65,12 +65,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Candidate.cs" />
+    <Compile Include="Machine\Actuator.cs" />
+    <Compile Include="Machine\IAutomaton.cs" />
+    <Compile Include="Machine\IRelay.cs" />
+    <Compile Include="Machine\Relay.cs" />
     <Compile Include="Offer.cs" />
     <Compile Include="Services\CandidateDeck.cs" />
     <Compile Include="Company.cs" />
     <Compile Include="Domain.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="Individual.cs" />
+    <Compile Include="Services\CompanyGameService.cs" />
     <Compile Include="Services\ModeratorService.cs" />
     <Compile Include="Model.generated.cs">
       <AutoGen>True</AutoGen>
