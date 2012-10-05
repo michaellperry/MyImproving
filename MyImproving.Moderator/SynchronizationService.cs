@@ -7,6 +7,7 @@ using UpdateControls.Correspondence;
 using UpdateControls.Correspondence.IsolatedStorage;
 using UpdateControls.Correspondence.BinaryHTTPClient;
 using MyImproving.Model;
+using MyImproving.Model.Subscriptions;
 
 namespace MyImproving.Moderator
 {
@@ -20,12 +21,10 @@ namespace MyImproving.Moderator
             HTTPConfigurationProvider configurationProvider = new HTTPConfigurationProvider();
             _community = new Community(IsolatedStorageStorageStrategy.Load())
                 .AddAsynchronousCommunicationStrategy(new BinaryHTTPAsynchronousCommunicationStrategy(configurationProvider))
-                .Register<CorrespondenceModel>()
-                .Subscribe(() => _domain)
-                .Subscribe(() => _domain.Games)
-                ;
+                .Register<CorrespondenceModel>();
 
             _domain = _community.AddFact(new Domain("Improving Enterprises"));
+            _community.Subscribe(_domain);
 
             // Synchronize whenever the user has something to send.
             _community.FactAdded += delegate

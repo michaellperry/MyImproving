@@ -5,6 +5,7 @@ using System.Text;
 using MyImproving.Model;
 using UpdateControls.Correspondence;
 using UpdateControls.Correspondence.Memory;
+using MyImproving.Model.Subscriptions;
 
 namespace MyImproving.Test
 {
@@ -20,30 +21,24 @@ namespace MyImproving.Test
         protected void InitializeCommunity()
         {
             var sharedCommunication = new MemoryCommunicationStrategy();
-            _communityFlynn = new Community(new MemoryStorageStrategy())
-                .AddCommunicationStrategy(sharedCommunication)
-                .Register<CorrespondenceModel>()
-                .Subscribe(() => _individualFlynn)
-                .Subscribe(() => _individualFlynn.Companies)
-                .Subscribe(() => _individualFlynn.Games)
-                ;
-            _communityAlan = new Community(new MemoryStorageStrategy())
-                .AddCommunicationStrategy(sharedCommunication)
-                .Register<CorrespondenceModel>()
-                .Subscribe(() => _individualAlan)
-                .Subscribe(() => _individualAlan.Companies)
-                .Subscribe(() => _individualAlan.Games)
-                ;
-            _communityModerator = new Community(new MemoryStorageStrategy())
-                .AddCommunicationStrategy(sharedCommunication)
-                .Register<CorrespondenceModel>()
-                .Subscribe(() => _domainModerator)
-                .Subscribe(() => _domainModerator.Games)
-                ;
+            _communityFlynn = NewCommunity(sharedCommunication);
+            _communityAlan = NewCommunity(sharedCommunication);
+            _communityModerator = NewCommunity(sharedCommunication);
 
             _individualFlynn = _communityFlynn.AddFact(new Individual("flynn"));
             _individualAlan = _communityAlan.AddFact(new Individual("alan"));
             _domainModerator = _communityModerator.AddFact(new Domain("Improving Enterprises"));
+
+            _communityFlynn.Subscribe(_individualFlynn);
+            _communityAlan.Subscribe(_individualAlan);
+            _communityModerator.Subscribe(_domainModerator);
+        }
+
+        private static Community NewCommunity(MemoryCommunicationStrategy sharedCommunication)
+        {
+            return new Community(new MemoryStorageStrategy())
+                .AddCommunicationStrategy(sharedCommunication)
+                .Register<CorrespondenceModel>();
         }
 
         protected void Synchronize()
