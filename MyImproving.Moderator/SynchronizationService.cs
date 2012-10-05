@@ -22,6 +22,7 @@ namespace MyImproving.Moderator
                 .AddAsynchronousCommunicationStrategy(new BinaryHTTPAsynchronousCommunicationStrategy(configurationProvider))
                 .Register<CorrespondenceModel>()
                 .Subscribe(() => _domain)
+                .Subscribe(() => _domain.Games)
                 ;
 
             _domain = _community.AddFact(new Domain("Improving Enterprises"));

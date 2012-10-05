@@ -38,6 +38,7 @@ namespace MyImproving.Test
                 .AddCommunicationStrategy(sharedCommunication)
                 .Register<CorrespondenceModel>()
                 .Subscribe(() => _domainModerator)
+                .Subscribe(() => _domainModerator.Games)
                 ;
 
             _individualFlynn = _communityFlynn.AddFact(new Individual("flynn"));

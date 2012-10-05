@@ -83,5 +83,25 @@ namespace MyImproving.Test
                     c.Relationship == candidate.Relationship));
             }
         }
+
+        [TestMethod]
+        public void FlynnMakesOfferToCandidate()
+        {
+            CandidateDeck deck = new CandidateDeck();
+            Round round = _gameModerator.CreateRound(1);
+            Candidate candidate = deck.DealCandidateCard(round);
+
+            Synchronize();
+
+            Round roundFlynn = _gameFlynn.Rounds.Single();
+            Turn turnFlynn = _companyFlynn.CreateTurn(roundFlynn);
+            Candidate candidateFlynn = roundFlynn.Candidates.Single();
+            turnFlynn.CreateOffer(candidateFlynn, 1);
+
+            Synchronize();
+
+            Assert.AreEqual(1, round.Offers.Count());
+            Assert.AreEqual(1, round.Offers.Single().Chances);
+        }
     }
 }

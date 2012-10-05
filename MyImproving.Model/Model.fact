@@ -75,6 +75,10 @@ query:
 	Candidate* candidates {
 		Candidate c : c.round = this
 	}
+
+	Offer* offers {
+		Offer o : o.candidate.round = this
+	}
 }
 
 fact Turn {
