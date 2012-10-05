@@ -990,14 +990,6 @@ namespace MyImproving.Model
             ;
 		}
         public static Query QueryCandidates = MakeQueryCandidates();
-        public static Query MakeQueryOffers()
-		{
-			return new Query()
-				.JoinSuccessors(Candidate.RoleRound)
-				.JoinSuccessors(Offer.RoleCandidate)
-            ;
-		}
-        public static Query QueryOffers = MakeQueryOffers();
 
         // Predicates
 
@@ -1009,7 +1001,6 @@ namespace MyImproving.Model
 
         // Results
         private Result<Candidate> _candidates;
-        private Result<Offer> _offers;
 
         // Business constructor
         public Round(
@@ -1033,7 +1024,6 @@ namespace MyImproving.Model
         private void InitializeResults()
         {
             _candidates = new Result<Candidate>(this, QueryCandidates);
-            _offers = new Result<Offer>(this, QueryOffers);
         }
 
         // Predecessor access
@@ -1052,10 +1042,6 @@ namespace MyImproving.Model
         public Result<Candidate> Candidates
         {
             get { return _candidates; }
-        }
-        public Result<Offer> Offers
-        {
-            get { return _offers; }
         }
 
         // Mutable property access
@@ -1434,6 +1420,13 @@ namespace MyImproving.Model
 			false));
 
         // Queries
+        public static Query MakeQueryOffers()
+		{
+			return new Query()
+				.JoinSuccessors(Offer.RoleCandidate)
+            ;
+		}
+        public static Query QueryOffers = MakeQueryOffers();
 
         // Predicates
 
@@ -1448,6 +1441,7 @@ namespace MyImproving.Model
         private int _relationship;
 
         // Results
+        private Result<Offer> _offers;
 
         // Business constructor
         public Candidate(
@@ -1473,6 +1467,7 @@ namespace MyImproving.Model
         // Result initializer
         private void InitializeResults()
         {
+            _offers = new Result<Offer>(this, QueryOffers);
         }
 
         // Predecessor access
@@ -1494,6 +1489,10 @@ namespace MyImproving.Model
         }
 
         // Query result access
+        public Result<Offer> Offers
+        {
+            get { return _offers; }
+        }
 
         // Mutable property access
 
@@ -2668,9 +2667,6 @@ namespace MyImproving.Model
 			community.AddQuery(
 				Round._correspondenceFactType,
 				Round.QueryCandidates.QueryDefinition);
-			community.AddQuery(
-				Round._correspondenceFactType,
-				Round.QueryOffers.QueryDefinition);
 			community.AddType(
 				Turn._correspondenceFactType,
 				new Turn.CorrespondenceFactFactory(fieldSerializerByType),
@@ -2687,6 +2683,9 @@ namespace MyImproving.Model
 				Candidate._correspondenceFactType,
 				new Candidate.CorrespondenceFactFactory(fieldSerializerByType),
 				new FactMetadata(new List<CorrespondenceFactType> { Candidate._correspondenceFactType }));
+			community.AddQuery(
+				Candidate._correspondenceFactType,
+				Candidate.QueryOffers.QueryDefinition);
 			community.AddType(
 				Offer._correspondenceFactType,
 				new Offer.CorrespondenceFactFactory(fieldSerializerByType),

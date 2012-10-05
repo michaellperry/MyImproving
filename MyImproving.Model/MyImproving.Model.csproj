@@ -65,11 +65,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Candidate.cs" />
-    <Compile Include="CandidateDeck.cs" />
+    <Compile Include="Services\CandidateDeck.cs" />
     <Compile Include="Company.cs" />
     <Compile Include="Domain.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="Individual.cs" />
+    <Compile Include="Services\ModeratorService.cs" />
     <Compile Include="Model.generated.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

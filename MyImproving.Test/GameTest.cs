@@ -12,6 +12,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MyImproving.Model;
 using System.Linq;
 using System.Collections.Generic;
+using MyImproving.Model.Services;
 
 namespace MyImproving.Test
 {
@@ -23,6 +24,7 @@ namespace MyImproving.Test
         private Game _gameModerator;
         private Game _gameAlan;
         private Game _gameFlynn;
+        private ModeratorService _moderator;
 
         [TestInitialize]
         public void Initialize()
@@ -38,6 +40,7 @@ namespace MyImproving.Test
             Synchronize();
 
             _gameModerator = _domainModerator.CreateGame(_domainModerator.Companies);
+            _moderator = new ModeratorService(_gameModerator);
 
             Synchronize();
 
@@ -48,26 +51,26 @@ namespace MyImproving.Test
         [TestMethod]
         public void ModeratorBeginsARound()
         {
-            _gameModerator.CreateRound(1);
+            _moderator.BeginNextRound();
 
             Synchronize();
 
             Assert.AreEqual(1, _gameAlan.Rounds.Count());
+            Assert.AreEqual(1, _gameAlan.Rounds.Single().Index);
             Assert.AreEqual(1, _gameFlynn.Rounds.Count());
+            Assert.AreEqual(1, _gameFlynn.Rounds.Single().Index);
         }
 
         [TestMethod]
         public void ModeratorDealsCandidateCards()
         {
-            CandidateDeck deck = new CandidateDeck();
-            Round round = _gameModerator.CreateRound(1);
-            List<Candidate> candidates = Enumerable.Range(0, 4)
-                .Select(i => deck.DealCandidateCard(round))
-                .ToList();
+            _moderator.BeginNextRound();
+            List<Candidate> candidates = _moderator.DealCandidates(4);
 
             Synchronize();
 
             Round roundAlan = _gameAlan.Rounds.Single();
+            Assert.AreEqual(4, roundAlan.Candidates.Count());
             foreach (var candidate in candidates)
             {
                 Assert.IsTrue(roundAlan.Candidates.Any(c =>
@@ -76,6 +79,7 @@ namespace MyImproving.Test
             }
 
             Round roundFlynn = _gameFlynn.Rounds.Single();
+            Assert.AreEqual(4, roundFlynn.Candidates.Count());
             foreach (var candidate in candidates)
             {
                 Assert.IsTrue(roundFlynn.Candidates.Any(c =>
@@ -87,9 +91,8 @@ namespace MyImproving.Test
         [TestMethod]
         public void FlynnMakesOfferToCandidate()
         {
-            CandidateDeck deck = new CandidateDeck();
-            Round round = _gameModerator.CreateRound(1);
-            Candidate candidate = deck.DealCandidateCard(round);
+            _moderator.BeginNextRound();
+            Candidate candidate = _moderator.DealCandidates(1).Single();
 
             Synchronize();
 
@@ -100,8 +103,8 @@ namespace MyImproving.Test
 
             Synchronize();
 
-            Assert.AreEqual(1, round.Offers.Count());
-            Assert.AreEqual(1, round.Offers.Single().Chances);
+            Assert.AreEqual(1, candidate.Offers.Count());
+            Assert.AreEqual(1, candidate.Offers.Single().Chances);
         }
     }
 }

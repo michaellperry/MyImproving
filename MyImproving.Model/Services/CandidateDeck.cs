@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MyImproving.Model
+namespace MyImproving.Model.Services
 {
     public class CandidateDeck
     {
