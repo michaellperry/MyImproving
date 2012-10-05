@@ -113,6 +113,11 @@ key:
 	Turn turn;
 	Candidate candidate;
 	int chances;
+
+query:
+	Hire* hires {
+		Hire h : h.offer = this
+	}
 }
 
 fact Hire {

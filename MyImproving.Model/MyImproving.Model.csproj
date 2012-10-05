@@ -65,6 +65,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Candidate.cs" />
+    <Compile Include="Offer.cs" />
     <Compile Include="Services\CandidateDeck.cs" />
     <Compile Include="Company.cs" />
     <Compile Include="Domain.cs" />

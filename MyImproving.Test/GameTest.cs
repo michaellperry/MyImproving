@@ -96,15 +96,93 @@ namespace MyImproving.Test
 
             Synchronize();
 
-            Round roundFlynn = _gameFlynn.Rounds.Single();
-            Turn turnFlynn = _companyFlynn.CreateTurn(roundFlynn);
-            Candidate candidateFlynn = roundFlynn.Candidates.Single();
-            turnFlynn.CreateOffer(candidateFlynn, 1);
+            MakeOffer(_companyFlynn, 1, candidate.Unique);
 
             Synchronize();
 
             Assert.AreEqual(1, candidate.Offers.Count());
             Assert.AreEqual(1, candidate.Offers.Single().Chances);
+        }
+
+        [TestMethod]
+        public void ModeratorAwardsCandidates()
+        {
+            _moderator.BeginNextRound();
+            List<Candidate> candidates = _moderator.DealCandidates(2);
+
+            Synchronize();
+
+            Offer offerAlan1 = MakeOffer(_companyAlan, 3, candidates[0].Unique);
+            Offer offerAlan2 = MakeOffer(_companyAlan, 1, candidates[1].Unique);
+
+            Offer offerFlynn1 = MakeOffer(_companyFlynn, 2, candidates[0].Unique);
+            Offer offerFlynn2 = MakeOffer(_companyFlynn, 7, candidates[1].Unique);
+
+            Synchronize();
+
+            _moderator.AwardCandidates();
+
+            Synchronize();
+
+            Assert.AreEqual(1, candidates[0].Offers.Count(offer => offer.Hires.Any()));
+            Assert.AreEqual(1, candidates[1].Offers.Count(offer => offer.Hires.Any()));
+
+            bool candidate1SelectedAlan = offerAlan1.Hires.Any();
+            bool candidate2SelectedAlan = offerAlan2.Hires.Any();
+            bool candidate1SelectedFlynn = offerFlynn1.Hires.Any();
+            bool candidate2SelectedFlynn = offerFlynn2.Hires.Any();
+
+            Assert.IsTrue(candidate1SelectedAlan ^ candidate1SelectedFlynn);
+            Assert.IsTrue(candidate2SelectedAlan ^ candidate2SelectedFlynn);
+        }
+
+        [TestMethod]
+        public void NoCompetitionOnCandidatesIsASureThing()
+        {
+            _moderator.BeginNextRound();
+            List<Candidate> candidates = _moderator.DealCandidates(2);
+
+            Synchronize();
+
+            Offer offerAlan1 = MakeOffer(_companyAlan, 3, candidates[0].Unique);
+
+            Offer offerFlynn2 = MakeOffer(_companyFlynn, 7, candidates[1].Unique);
+
+            Synchronize();
+
+            _moderator.AwardCandidates();
+
+            Synchronize();
+
+            Assert.AreEqual(1, candidates[0].Offers.Count(offer => offer.Hires.Any()));
+            Assert.AreEqual(1, candidates[1].Offers.Count(offer => offer.Hires.Any()));
+
+            bool candidate1SelectedAlan = offerAlan1.Hires.Any();
+            bool candidate2SelectedFlynn = offerFlynn2.Hires.Any();
+
+            Assert.IsTrue(candidate1SelectedAlan);
+            Assert.IsTrue(candidate2SelectedFlynn);
+        }
+
+        [TestMethod]
+        public void NoOfferAndCandidateWalks()
+        {
+            _moderator.BeginNextRound();
+            List<Candidate> candidates = _moderator.DealCandidates(2);
+
+            _moderator.AwardCandidates();
+
+            Assert.AreEqual(0, candidates[0].Offers.Count(offer => offer.Hires.Any()));
+            Assert.AreEqual(0, candidates[1].Offers.Count(offer => offer.Hires.Any()));
+        }
+
+        private static Offer MakeOffer(Company company, int chances, Guid candidateId)
+        {
+            Game game = company.Games.Single();
+            Round round = game.Rounds.Single();
+            Turn turn = company.CreateTurn(round);
+            Candidate candidate = round.Candidates.Single(c => c.Unique == candidateId);
+            return turn.CreateOffer(candidate, chances);
         }
     }
 }

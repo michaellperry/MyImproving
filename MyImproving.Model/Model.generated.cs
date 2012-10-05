@@ -1555,6 +1555,13 @@ namespace MyImproving.Model
 			false));
 
         // Queries
+        public static Query MakeQueryHires()
+		{
+			return new Query()
+				.JoinSuccessors(Hire.RoleOffer)
+            ;
+		}
+        public static Query QueryHires = MakeQueryHires();
 
         // Predicates
 
@@ -1566,6 +1573,7 @@ namespace MyImproving.Model
         private int _chances;
 
         // Results
+        private Result<Hire> _hires;
 
         // Business constructor
         public Offer(
@@ -1591,6 +1599,7 @@ namespace MyImproving.Model
         // Result initializer
         private void InitializeResults()
         {
+            _hires = new Result<Hire>(this, QueryHires);
         }
 
         // Predecessor access
@@ -1610,6 +1619,10 @@ namespace MyImproving.Model
         }
 
         // Query result access
+        public Result<Hire> Hires
+        {
+            get { return _hires; }
+        }
 
         // Mutable property access
 
@@ -2690,6 +2703,9 @@ namespace MyImproving.Model
 				Offer._correspondenceFactType,
 				new Offer.CorrespondenceFactFactory(fieldSerializerByType),
 				new FactMetadata(new List<CorrespondenceFactType> { Offer._correspondenceFactType }));
+			community.AddQuery(
+				Offer._correspondenceFactType,
+				Offer.QueryHires.QueryDefinition);
 			community.AddType(
 				Hire._correspondenceFactType,
 				new Hire.CorrespondenceFactFactory(fieldSerializerByType),
